@@ -16,3 +16,6 @@ class BNReasoner:
             self.bn = net
 
     # TODO: This is where your methods should go
+
+obj1 = BNReasoner("testing/dog_problem.BIFXML")
+print (obj1.bn.draw_structure())
