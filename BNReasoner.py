@@ -1,8 +1,9 @@
 from typing import Union
 from BayesNet import BayesNet
+from abc import ABC, abstractmethod
 
 
-class BNReasoner:
+class BNReasoner(ABC):
     def __init__(self, net: Union[str, BayesNet]):
         """
         :param net: either file path of the bayesian network in BIFXML format or BayesNet object
@@ -16,3 +17,7 @@ class BNReasoner:
             self.bn = net
 
     # TODO: This is where your methods should go
+
+    @abstractmethod
+    def execute(self):
+        pass
