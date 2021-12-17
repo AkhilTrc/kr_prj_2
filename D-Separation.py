@@ -1,8 +1,7 @@
 from BNReasoner import BNReasoner
 from BayesNet import BayesNet
 from collections import deque
-from typing import Union ################################## set
-import networkx as nx
+from typing import Union 
 from networkx.utils import UnionFind
 
 
@@ -34,25 +33,20 @@ class DSeparation(BNReasoner):
         
         # Pruning Step 2: Removes all edges outgoing from nodes in Z.
         #
-        # for edge in list(self.bn.structure.out_edge(Z)):
-            # self.bn.del_edge(edge[0], edge[1])
-            # self.bn.del_edges_from(list(self.out_edge(Z)))  
-
         self.bn.del_edges_from(self.bn.get_out_edge(Z))
 
         # To find connected paths in the pruned graph G'.
-        # Ignoring Directedness i.e. udg -> Undirected Graph represented using disjoint sets.
-        # Get weakly connected components.
+        # Get weakly connected components. Check presence of X and Y 
+        #   in them using disjoint set data structure.
         # 
         udg = UnionFind(set(self.bn.get_all_variables()))
-        g = self.bn.copy_graph()
-        for w_node in self.bn.wcc():        # Error here.
+        for w_node in self.bn.wcc():        
             udg.union(*w_node) 
         # Merge all. 
         udg.union(*X)
         udg.union(*Y)
 
-        # False if atleast one connection found.
+        # False if connection found.
         #
         if X and Y and udg[next(iter(X))] == udg[next(iter(Y))]:
             return False
@@ -60,7 +54,7 @@ class DSeparation(BNReasoner):
             return True 
         
         
-X, Y, Z = {"light-on"}, {"dog-out"}, {"family-out"}
+X, Y, Z = {"light-on"}, {"dog-out"}, {"bowel-problem"}
 bnReasoner = DSeparation('testing/dog_problem.BIFXML', X, Y, Z)
 print (bnReasoner.execute())
 
