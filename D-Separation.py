@@ -46,7 +46,7 @@ class DSeparation(BNReasoner):
         udg.union(*X)
         udg.union(*Y)
 
-        # False if connection found.
+        # False if connection exists.
         #
         if X and Y and udg[next(iter(X))] == udg[next(iter(Y))]:
             return False
