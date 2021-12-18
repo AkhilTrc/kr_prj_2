@@ -44,9 +44,9 @@ class NetworkPruning(BNReasoner):
         return leaves
 
 
-X = {"Wet Grass?"}
-Y = {"Winter?"}
-Z = {"Rain?"}
+X = {"X"}
+Y = {"I"}
+Z = {"J"}
 bnReasoner = NetworkPruning('testing/lecture_example2.BIFXML', X, Y, Z)
-bnReasoner.execute()
+bnReasoner.bn = bnReasoner.execute()
 bnReasoner.bn.draw_structure()
