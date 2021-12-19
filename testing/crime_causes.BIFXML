@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+
+<!-- DTD for the XMLBIF 0.3 format -->
+<!DOCTYPE BIF [
+	<!ELEMENT BIF ( NETWORK )*>
+	      <!ATTLIST BIF VERSION CDATA #REQUIRED>
+	<!ELEMENT NETWORK ( NAME, ( PROPERTY | VARIABLE | DEFINITION )* )>
+	<!ELEMENT NAME (#PCDATA)>
+	<!ELEMENT VARIABLE ( NAME, ( OUTCOME |  PROPERTY )* ) >
+	      <!ATTLIST VARIABLE TYPE (nature|decision|utility) "nature">
+	<!ELEMENT OUTCOME (#PCDATA)>
+	<!ELEMENT DEFINITION ( FOR | GIVEN | TABLE | PROPERTY )* >
+	<!ELEMENT FOR (#PCDATA)>
+	<!ELEMENT GIVEN (#PCDATA)>
+	<!ELEMENT TABLE (#PCDATA)>
+	<!ELEMENT PROPERTY (#PCDATA)>
+]>
+
+<BIF VERSION="0.3">
+<NETWORK>
+    <NAME>Crime</NAME>
+
+    <!-- Variables-->
+    <VARIABLE TYPE="nature">
+        <NAME>Psychological factors</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Environmental factors</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Sociological factors</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Substance abuse</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Trauma</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Gangs</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Family</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Power structures</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Socio-economic factors</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Poverty</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Centralized government</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Access to technology</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Authoritarian</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Censorship</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Domestic Violence</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Genocide</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Terrorism</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Cybercrime</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+
+    <!-- PCTs -->
+    <DEFINITION>
+        <FOR>Psychological factors</FOR>
+        <TABLE>0.2 0.8</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Environmental factors</FOR>
+        <TABLE>0.3 0.7</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Sociological factors</FOR>
+        <TABLE>0.7 0.3</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Substance abuse</FOR>
+        <GIVEN>Psychological factors</GIVEN>
+        <GIVEN>Environmental factors</GIVEN>
+        <TABLE>0.9 0.1 0.3 0.7 0.7 0.3 0 1</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Trauma</FOR>
+        <GIVEN>Psychological factors</GIVEN>
+        <GIVEN>Environmental factors</GIVEN>
+        <TABLE>0.95 0.05 0.8 0.2 0.85 0.15 0.05 0.95</TABLE> 
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Family</FOR>
+        <GIVEN>Psychological factors</GIVEN>
+        <GIVEN>Environmental factors</GIVEN>
+        <TABLE>0.9 0.1 0.6 0.4 0.7 0.3 0.01 0.99</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Gangs</FOR>
+        <GIVEN>Sociological factors</GIVEN>
+        <TABLE>0.75 0.25 0.1 0.9</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Power structures</FOR>
+        <GIVEN>Sociological factors</GIVEN>
+        <TABLE>1 0 1 0</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Socio-economic factors</FOR>
+        <GIVEN>Sociological factors</GIVEN>
+        <TABLE>1 0 1 0</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Poverty</FOR>
+        <GIVEN>Socio-economic factors</GIVEN>
+        <TABLE>0.9 0.1 0.9 0.1</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Centralized government</FOR>
+        <GIVEN>Power structures</GIVEN>
+        <TABLE>0.6 0.4 0.2 0.8</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Access to technology</FOR>
+        <GIVEN>Socio-economic factors</GIVEN>
+        <TABLE>0.85 0.15 0.8 0.2</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Authoritarian</FOR>
+        <GIVEN>Centralized government</GIVEN>
+        <TABLE>0.65 0.35 0.05 0.95</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Censorship</FOR>
+        <GIVEN>Access to technology</GIVEN>
+        <GIVEN>Authoritarian</GIVEN>
+        <TABLE>0.95 0.05 0.6 0.4 0.8 0.2 0.3 0.7</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Domestic Violence</FOR>
+        <GIVEN>Trauma</GIVEN>
+        <GIVEN>Family</GIVEN>
+        <GIVEN>Substance abuse</GIVEN>
+        <GIVEN>Poverty</GIVEN>
+        <TABLE>1 0 0.97 0.03 0.8 0.2 0.75 0.25 0.8 0.2 0.82 0.18 0.6 0.4 0.35 0.65</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Genocide</FOR>
+        <GIVEN>Gangs</GIVEN>
+        <GIVEN>Authoritarian</GIVEN>
+        <TABLE>0.95 0.05 0.92 0.08 0.87 0.13 0.08 0.92</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Terrorism</FOR>
+        <GIVEN>Gangs</GIVEN>
+        <TABLE>0.9 0.1 0.1 0.9</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Cybercrime</FOR>
+        <GIVEN>Access to technology</GIVEN>
+        <TABLE>1 0 0 1</TABLE>
+    </DEFINITION>
+</NETWORK>
+</BIF>
