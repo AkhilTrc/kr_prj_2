@@ -1,6 +1,9 @@
 from typing import Union
 from BayesNet import BayesNet
 from abc import ABC, abstractmethod
+import os
+
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 import pandas as pd
 
 
