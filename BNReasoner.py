@@ -1,6 +1,20 @@
 from typing import Union
 from BayesNet import BayesNet
 from abc import ABC, abstractmethod
+import pandas as pd
+
+
+def sum_out(cpt: pd.DataFrame, variable: str) -> pd.DataFrame:
+
+    columns = [column for column in cpt if (column != 'p' and column != variable)]
+
+    partition_t = cpt[variable] == True
+    partition_t_cpt = cpt[partition_t].drop(variable, axis=1)
+    partition_f_cpt = cpt[~partition_t].drop(variable, axis=1)
+
+    print(columns)
+    summed_cpt = pd.concat([partition_t_cpt, partition_f_cpt]).groupby(columns, as_index=False)["p"].sum()
+    return summed_cpt
 
 
 class BNReasoner(ABC):

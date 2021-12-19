@@ -1,6 +1,9 @@
 from BNReasoner import BNReasoner
 
 
-class MapAndMep(BNReasoner):
+class MapAndMpe(BNReasoner):
     def execute(self):
         pass
+
+    def mpe(self, e):
+        return 0
