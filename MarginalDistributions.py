@@ -1,6 +1,6 @@
 import copy
 from typing import Union
-from BNReasoner import BNReasoner, sum_out
+from BNReasoner import BNReasoner, sum_out, multiply_factors
 from BayesNet import BayesNet
 import pandas as pd
 
@@ -44,22 +44,12 @@ class MarginalDistributions(BNReasoner):
                 projection_over = var_name
                 factor.append(all_cpts[var_name])
         if factor != []:
-            combined_cpt = self.multiply_factors(factor, X)
+            combined_cpt = multiply_factors(factor, X)
             factor_over_var = sum_out(combined_cpt, X)
             self.bn.update_cpt(projection_over, factor_over_var)
 
-    def multiply_factors(self):
-        pass
-
-    def multiply_factors(self, cpts: list[pd.DataFrame], variable) -> pd.DataFrame:
-        # print(cpts.split())
-        cpt1, cpt2 = cpts
-        combined_cpt = pd.merge(left=cpt1, right=cpt2, on=variable, how='inner')
-        # print(combined_cpt)
-
-        combined_cpt['p'] = (combined_cpt['p_x'] * combined_cpt['p_y'])
-        combined_cpt.drop(['p_x', 'p_y'], inplace=True, axis=1)
-        return combined_cpt
+    # def multiply_factors(self):
+    #     pass
 
     def reduce_using_evidence(self):
 
