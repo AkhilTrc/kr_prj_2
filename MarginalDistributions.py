@@ -12,25 +12,30 @@ class MarginalDistributions(BNReasoner):
 
 
     def execute(self):
-        result = self.get__all_cpts_for_x(self.varibales)
+        # result = self.marginal_joint(self.varibales)
         # print(result['family-out'])
         return result
     
     #P(Q)
-    def marginal_joint():
+    def marginal_joint(self, Q: list):
 
         #load the network / cpt
+        all_cpts = self.bn.get_all_cpts()
+        
+        #get order for Q
+        order_for_Q = []
+        if(order_for_Q > 0):
+            for i in order_for_Q:
+                self.var_elimination(i)
 
-        #get order
 
         #compute elimination for each variable other than Q
-        pass
     def marginal_posterior(self):
         all_cpts = self.bn.get_all_cpts()
 
 
         
-    def get__all_cpts_for_x(self, X):
+    def var_elimination(self, X):
         all_cpts = self.bn.get_all_cpts()
         factor = []
         projection_over = ''
@@ -45,8 +50,7 @@ class MarginalDistributions(BNReasoner):
             combined_cpt = self.multiply_factors(factor, X)
             factor_over_var = self.sum_out(combined_cpt, X)
             self.bn.update_cpt(projection_over, factor_over_var)
-            print(self.bn.get_cpt(projection_over))
-        return factor
+
 
     def multiply_factors():
         pass
@@ -80,6 +84,6 @@ class MarginalDistributions(BNReasoner):
 
 
 variables = {"bowel-problem","family-out"}
-bnReasoner = MarginalDistributions('testing/dog_problem.BIFXML', "bowel-problem")
+bnReasoner = MarginalDistributions('testing/dog_problem.BIFXML', variables)
 bnReasoner.execute()
     
