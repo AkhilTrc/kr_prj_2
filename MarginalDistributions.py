@@ -6,9 +6,8 @@ import pandas as pd
 
 
 class MarginalDistributions(BNReasoner):
-    def __init__(self, net: Union[str, BayesNet], factor: pd.DataFrame, varibales:str):
+    def __init__(self, net: Union[str, BayesNet], varibales:str):
         super().__init__(net)
-        self.factor = factor
         self.varibales =  varibales
 
 
@@ -16,21 +15,37 @@ class MarginalDistributions(BNReasoner):
         result = self.get__all_cpts_for_x(self.varibales)
         # print(result['family-out'])
         return result
+    
+    #P(Q)
+    def marginal_joint():
 
+        #load the network / cpt
+
+        #get order
+
+        #compute elimination for each variable other than Q
+        pass
+    def marginal_posterior(self):
+        all_cpts = self.bn.get_all_cpts()
+
+
+        
     def get__all_cpts_for_x(self, X):
         all_cpts = self.bn.get_all_cpts()
         factor = []
+        projection_over = ''
         for var_name in all_cpts:
             # print(var_name)
             if var_name == X:
                 factor.append(all_cpts[var_name])
             elif X in all_cpts[var_name].columns:
+                projection_over = var_name
                 factor.append(all_cpts[var_name])
         if factor != []:
             combined_cpt = self.multiply_factors(factor, X)
             factor_over_var = self.sum_out(combined_cpt, X)
-            print(factor_over_var)
-        # print(self.sum_out(factor_over_car, X))
+            self.bn.update_cpt(projection_over, factor_over_var)
+            print(self.bn.get_cpt(projection_over))
         return factor
 
     def multiply_factors():
@@ -64,7 +79,7 @@ class MarginalDistributions(BNReasoner):
         pass
 
 
-variable = "bowel-problem"
-bnReasoner = MarginalDistributions('testing/dog_problem.BIFXML', variable, variable)
+variables = {"bowel-problem","family-out"}
+bnReasoner = MarginalDistributions('testing/dog_problem.BIFXML', "bowel-problem")
 bnReasoner.execute()
     
