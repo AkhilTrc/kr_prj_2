@@ -53,8 +53,14 @@ class DSeparation(BNReasoner):
         else:
             return True 
         
-        
-X, Y, Z = {"light-on"}, {"dog-out"}, {"bowel-problem"}
-bnReasoner = DSeparation('testing/dog_problem.BIFXML', X, Y, Z)
+
+varset = ("Psychological factors", "Environmental factors", "Sociological factors",
+            "Substance abuse", "Trauma", "Gangs", "Family", "Power structures",
+            "Socio-economic factors", "Poverty", "Centralized government",
+            "Access to technology", "Authoritarian", "Censorship",
+            "Domestic Violence", "Genocide", "Terrorism", "Cybercrime")
+
+X, Y, Z = {"Psychological factors"}, {"Power structures"}, {"Sociological factors"}
+bnReasoner = DSeparation('testing/crime_causes.BIFXML', X, Y, Z)
 print (bnReasoner.execute())
 
