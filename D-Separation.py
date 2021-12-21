@@ -36,12 +36,13 @@ class DSeparation(BNReasoner):
         self.bn.del_edges_from(self.bn.get_out_edge(Z))
 
         # To find connected paths in the pruned graph G'.
-        # Get weakly connected components. Check presence of X and Y 
-        #   in them using disjoint set data structure.
+        # Get weakly-connected-components. Check presence of X and Y 
+        # in them using disjoint set data structure.
         # 
         udg = UnionFind(set(self.bn.get_all_variables()))
         for w_node in self.bn.wcc():        
             udg.union(*w_node) 
+
         # Merge all. 
         udg.union(*X)
         udg.union(*Y)
@@ -53,14 +54,15 @@ class DSeparation(BNReasoner):
         else:
             return True 
         
+# Use-case Bayesian Network - crime_causes.
+#
+varset = {1: "Psychological factors", 2: "Environmental factors", 3: "Sociological factors",
+            4: "Substance abuse", 5: "Trauma", 6: "Gangs", 7: "Family", 8: "Power structures",
+            9: "Socio-economic factors", 10: "Poverty", 11: "Centralized government",
+            12: "Access to technology", 13: "Authoritarian", 14: "Censorship",
+            15: "Domestic Violence", 16: "Genocide", 17: "Terrorism", 18: "Cybercrime"}
 
-varset = ("Psychological factors", "Environmental factors", "Sociological factors",
-            "Substance abuse", "Trauma", "Gangs", "Family", "Power structures",
-            "Socio-economic factors", "Poverty", "Centralized government",
-            "Access to technology", "Authoritarian", "Censorship",
-            "Domestic Violence", "Genocide", "Terrorism", "Cybercrime")
-
-X, Y, Z = {"Psychological factors"}, {"Power structures"}, {"Sociological factors"}
+X, Y, Z = {varset[1]}, {varset[12]}, {varset[15]}
 bnReasoner = DSeparation('testing/crime_causes.BIFXML', X, Y, Z)
 print (bnReasoner.execute())
 
