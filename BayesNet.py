@@ -85,6 +85,14 @@ class BayesNet:
         """
         return [c for c in self.structure.successors(variable)]
 
+    def get_parents(self, variable: str) -> List[str]:  # Additional module, to get parents.
+        """
+        Returns the parents of the variable in the graph.
+        :param variable: Variable to get the parents from
+        :return: List of parents
+        """
+        return [c for c in self.structure.predecessors(variable)]
+
     def get_cpt(self, variable: str) -> pd.DataFrame:
         """
         Returns the conditional probability table of a variable in the BN.
@@ -226,3 +234,16 @@ class BayesNet:
         :param edge: Edge to be deleted (e.g. ('A', 'B')).
         """
         self.structure.remove_edge(edge[0], edge[1])
+
+    def get_out_edge(self, variable: str) -> List[Tuple[str, str]]:
+        return [e for e in self.structure.out_edges(variable)]
+
+    def del_edges_from(self, edge: List[Tuple[str, str]]) -> None:
+        self.structure.remove_edges_from(edge)
+
+    def copy_graph(self) -> None:
+        self.structure.copy()
+    
+    def wcc(self) -> List[str]:
+        return nx.weakly_connected_components(self.structure)
+
