@@ -6,16 +6,15 @@ from BayesNet import BayesNet
 
 
 class NetworkPruning(BNReasoner):
-    def __init__(self, net: Union[str, BayesNet], X: set, Y: set, Z: set):
+    def __init__(self, net: Union[str, BayesNet], query: set, evidence: set):
         super().__init__(net)
-        self.X = X
-        self.Y = Y
-        self.Z = Z
+        self.query = query
+        self.evidence = evidence
 
     def prune_nodes(self):
         nodes = set(self.bn.get_all_variables())
         leaves = self.get_leaf_nodes(nodes)
-        remaining_nodes = self.X.union(self.Y).union(self.Z)
+        remaining_nodes = self.query.union(self.evidence)
         bn_copy = copy.deepcopy(self.bn)
         for leaf in leaves:
             if leaf not in remaining_nodes:
@@ -23,12 +22,12 @@ class NetworkPruning(BNReasoner):
         return bn_copy
 
     def prune_edges(self, pruned_bn):
-        for z in self.Z:
+        for e in self.evidence:
             edges = []
-            for f, t in self.bn.structure.edges(nbunch=self.Z):
+            for f, t in self.bn.structure.edges(nbunch=self.evidence):
                 edges.append(t)
             for edge in edges:
-                pruned_bn.del_edge((z, edge))
+                pruned_bn.del_edge((e, edge))
         return pruned_bn
 
     def execute(self):
@@ -44,9 +43,8 @@ class NetworkPruning(BNReasoner):
         return leaves
 
 
-X = {"X"}
-Y = {"I"}
-Z = {"J"}
-bnReasoner = NetworkPruning('testing/lecture_example2.BIFXML', X, Y, Z)
+query = {"X"}
+evidence = {"J"}
+bnReasoner = NetworkPruning('testing/lecture_example2.BIFXML', query, evidence)
 bnReasoner.bn = bnReasoner.execute()
 bnReasoner.bn.draw_structure()
