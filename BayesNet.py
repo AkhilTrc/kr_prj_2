@@ -240,9 +240,6 @@ class BayesNet:
 
     def del_edges_from(self, edge: List[Tuple[str, str]]) -> None:
         self.structure.remove_edges_from(edge)
-
-    def copy_graph(self) -> None:
-        self.structure.copy()
     
     def wcc(self) -> List[str]:
         return nx.weakly_connected_components(self.structure)
