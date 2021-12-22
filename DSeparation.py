@@ -11,10 +11,10 @@ class DSeparation(BNReasoner):
         self.X, self.Y, self.Z = X, Y, Z
 
     def execute(self):
-        result = self.dsep(X, Y, Z)
+        result = self.dsep(self.X, self.Y, self.Z)
         return result
 
-    def dsep(self, X, Y, Z):
+    def dsep(self, X: set, Y: set, Z: set) -> bool:
         XYZ = X.union(Y).union(Z)
 
         # Pruning Step 1: Find and remove leaf nodes that are not part of the X, Y, Z union.
@@ -62,6 +62,6 @@ varset = {1: "Psychological factors", 2: "Environmental factors", 3: "Sociologic
             12: "Access to technology", 13: "Authoritarian", 14: "Censorship",
             15: "Domestic Violence", 16: "Genocide", 17: "Terrorism", 18: "Cybercrime"}
 
-X, Y, Z = {varset[1]}, {varset[12]}, {varset[15]}
+X, Y, Z = {varset[1]}, {varset[2]}, {varset[14]}
 bnReasoner = DSeparation('testing/crime_causes.BIFXML', X, Y, Z)
 print (bnReasoner.execute())
