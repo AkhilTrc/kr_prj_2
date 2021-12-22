@@ -26,5 +26,5 @@ pip install -r requirements.txt
 
 ### Executing program
 
- * Simply running the test files will execute the respective method with the given parameters.
+ * Running the test files(file names ending with test) will execute the respective method with the given parameters in the test file.
  * In order to test for d-separation, please run the DSeparation.py file. 
