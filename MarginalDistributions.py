@@ -8,7 +8,6 @@ from Ordering import Ordering
 
 
 def sum_out(cpt: pd.DataFrame, variable: str) -> pd.DataFrame:
-    print("------------", cpt, variable)
     columns = [column for column in cpt if (
             column != 'p' and column != variable)]
 
@@ -64,7 +63,7 @@ class MarginalDistributions(BNReasoner):
         E: evidence could be empty : {}
         '''
 
-        order = Ordering().min_degree(bn=self.bn, X=list(
+        order = Ordering(self.bn).min_degree(bn=self.bn, variables=list(
             set(self.bn.get_all_variables()) - X))
 
         if E != {}:
@@ -73,13 +72,13 @@ class MarginalDistributions(BNReasoner):
             reduced_cpts = self.reduce_using_evidence(E)
         j = 0
         for variable in order:
-            all_cpts_with_var = self.get_cpts_with_var(reduced_cpts, variable=variable)
+            all_cpts_with_var = get_cpts_with_var(reduced_cpts, variable=variable)
             all_cpts = list(all_cpts_with_var.values())
             first_cpt = all_cpts[0]
 
             for i in range(len(all_cpts_with_var) - 1):
-                first_cpt = self.multiply_factors(first_cpt, cpt2=all_cpts[i + 1])
-            summed_out_factor = self.sum_out(cpt=first_cpt, variable=variable)
+                first_cpt = multiply_factors(first_cpt, cpt2=all_cpts[i + 1])
+            summed_out_factor = sum_out(cpt=first_cpt, variable=variable)
             for var, cpt in all_cpts_with_var.items():
                 del reduced_cpts[var]
             reduced_cpts[str(j)] = summed_out_factor
@@ -87,7 +86,7 @@ class MarginalDistributions(BNReasoner):
         factor_list = list(reduced_cpts.values())
         result = factor_list[0]
         for i in range(len(factor_list) - 1):
-            result = self.multiply_factors(result, cpt2=factor_list[i + 1])
+            result = multiply_factors(result, cpt2=factor_list[i + 1])
 
         if E != {}:
             result = self.normalize_by_evidence(result, E)
