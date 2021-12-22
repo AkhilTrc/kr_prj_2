@@ -1,9 +1,49 @@
-import copy
-from typing import Counter, Set, Union
+from typing import Set, Union
+
+import pandas as pd
+
 from BNReasoner import BNReasoner
 from BayesNet import BayesNet
-import pandas as pd
 from Ordering import Ordering
+
+
+def sum_out(cpt: pd.DataFrame, variable: str) -> pd.DataFrame:
+    print("------------", cpt, variable)
+    columns = [column for column in cpt if (
+            column != 'p' and column != variable)]
+
+    partition_t = cpt[variable] == True
+    partition_t_cpt = cpt[partition_t].drop(variable, axis=1)
+    partition_f_cpt = cpt[~partition_t].drop(variable, axis=1)
+
+    summed_cpt = pd.concat([partition_t_cpt, partition_f_cpt]).groupby(
+        columns, as_index=False)["p"].sum()
+
+    return summed_cpt
+
+
+def multiply_factors(cpt1, cpt2) -> pd.DataFrame:
+    try:
+        common_vars = list(
+            set([col for col in cpt1.columns if col != 'p']) & set([col for col in cpt2.columns if col != 'p']))
+
+        cpt1, cpt2 = cpt1, cpt2
+        combined_cpt = pd.merge(left=cpt1, right=cpt2,
+                                on=common_vars, how='inner')
+
+        combined_cpt['p'] = (combined_cpt['p_x'] * combined_cpt['p_y'])
+        combined_cpt.drop(['p_x', 'p_y'], inplace=True, axis=1)
+        return combined_cpt
+    except Exception as e:
+        print(e)
+
+
+def get_cpts_with_var(all_cpts: dict[str, pd.DataFrame], variable: str):
+    cpts = {}
+    for var, cpt in all_cpts.items():
+        if variable in cpt.columns:
+            cpts[var] = cpt
+    return cpts
 
 
 class MarginalDistributions(BNReasoner):
@@ -16,7 +56,7 @@ class MarginalDistributions(BNReasoner):
         result = self.marginal_Dist(self.varibales, self.Evidence)
         return result
 
-    #P(Q)
+    # P(Q)
     def marginal_Dist(self, X: Set[str], E: dict[str, bool]) -> pd.DataFrame:
         '''
         Marginal distribution of variables X given E
@@ -24,22 +64,22 @@ class MarginalDistributions(BNReasoner):
         E: evidence could be empty : {}
         '''
 
-        order = Ordering().min_degree(bn=self.bn, X=list(
+        order = Ordering().min_degree(bn=self.bn, variables=list(
             set(self.bn.get_all_variables()) - X))
 
         if E != {}:
             reduced_cpts = self.reduce_using_evidence(E)
-        else: 
+        else:
             reduced_cpts = self.reduce_using_evidence(E)
         j = 0
         for variable in order:
-            all_cpts_with_var = self.get_cpts_with_var(reduced_cpts, variable=variable)
+            all_cpts_with_var = get_cpts_with_var(reduced_cpts, variable=variable)
             all_cpts = list(all_cpts_with_var.values())
             first_cpt = all_cpts[0]
 
             for i in range(len(all_cpts_with_var) - 1):
-                first_cpt = self.multiply_factors(first_cpt, cpt2=all_cpts[i + 1])
-            summed_out_factor = self.sum_out(cpt=first_cpt, variable=variable)
+                first_cpt = multiply_factors(first_cpt, cpt2=all_cpts[i + 1])
+            summed_out_factor = sum_out(cpt=first_cpt, variable=variable)
             for var, cpt in all_cpts_with_var.items():
                 del reduced_cpts[var]
             reduced_cpts[str(j)] = summed_out_factor
@@ -47,52 +87,14 @@ class MarginalDistributions(BNReasoner):
         S_list = list(reduced_cpts.values())
         result = S_list[0]
         for i in range(len(S_list) - 1):
-            result = self.multiply_factors(result, cpt2=S_list[i + 1])
+            result = multiply_factors(result, cpt2=S_list[i + 1])
 
         if E != {}:
             result = self.normalize_by_evidence(result, E)
         return result
 
-    
     def var_elimination(self, X, E):
         pass
-      
-    def sum_out(self, cpt: pd.DataFrame, variable: str) -> pd.DataFrame:
-
-        columns = [column for column in cpt if (
-            column != 'p' and column != variable)]
-
-        partition_t = cpt[variable] == True
-        partition_t_cpt = cpt[partition_t].drop(variable, axis=1)
-        partition_f_cpt = cpt[~partition_t].drop(variable, axis=1)
-
-        summed_cpt = pd.concat([partition_t_cpt, partition_f_cpt]).groupby(
-            columns, as_index=False)["p"].sum()
-
-        return summed_cpt
-
-    def multiply_factors(self, cpt1, cpt2) -> pd.DataFrame:
-        try:
-            common_vars = list(
-                set([col for col in cpt1.columns if col != 'p']) & set([col for col in cpt2.columns if col != 'p']))
-
-            cpt1, cpt2 = cpt1, cpt2
-            combined_cpt = pd.merge(left=cpt1, right=cpt2,
-                                    on=common_vars, how='inner')
-
-            combined_cpt['p'] = (combined_cpt['p_x'] * combined_cpt['p_y'])
-            combined_cpt.drop(['p_x', 'p_y'], inplace=True, axis=1)
-            return combined_cpt
-        except Exception as e:
-            print(e)
-
-
-    def get_cpts_with_var(self, all_cpts: dict[str, pd.DataFrame], variable: str):
-            cpts = {}
-            for var, cpt in all_cpts.items():
-                if variable in cpt.columns:
-                    cpts[var] = cpt
-            return cpts
 
     def reduce_using_evidence(self, E):
 
@@ -114,5 +116,3 @@ class MarginalDistributions(BNReasoner):
         evidence_prob = probablity_e.iloc[0]['p']
         cpt['p'] /= evidence_prob
         return cpt
-        
-

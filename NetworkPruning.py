@@ -6,7 +6,7 @@ from BayesNet import BayesNet
 
 
 class NetworkPruning(BNReasoner):
-    def __init__(self, net: Union[str, BayesNet], query: set, evidence: set):
+    def __init__(self, net: Union[str, BayesNet], query: set, evidence: {}):
         super().__init__(net)
         self.query = query
         self.evidence = evidence
@@ -43,8 +43,8 @@ class NetworkPruning(BNReasoner):
         return leaves
 
 
-query = {"X"}
-evidence = {"J"}
-bnReasoner = NetworkPruning('testing/lecture_example2.BIFXML', query, evidence)
-bnReasoner.bn = bnReasoner.execute()
-bnReasoner.bn.draw_structure()
+# query = {"X"}
+# evidence = {"J"}
+# bnReasoner = NetworkPruning('testing/lecture_example2.BIFXML', query, evidence)
+# bnReasoner.bn = bnReasoner.execute()
+# bnReasoner.bn.draw_structure()
